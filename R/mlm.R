@@ -16,25 +16,36 @@ mlm <- function(data, response_col_name) {
   assert_string(response_col_name)
 
   # missingness check
-  assert(!anyMissing(data))
+  assert_false(all(sapply(data, anyMissing)))
+
+  assert(ncol(data) >= 2)
+  assert(ncol(data) <= nrow(data))
 
   # check that response variable is valid
   all_var_names <- names(data)
   assert_true(response_col_name %in% all_var_names)
 
+  predictor_var_names <- -which(names(data) == response_col_name)
+
   Y <- data[, response_col_name]
-  X_no_intercept <- data[, -which(names(data) == response_col_name)]
+  X_no_intercept <- data[, predictor_var_names]
+
+  # accessing a single column returns a vector, but we want a dataframe
+  if (is.vector(X_no_intercept)) {
+    X_no_intercept <- data.frame(x = X_no_intercept)
+    names(X_no_intercept) <- names(data)[predictor_var_names]
+  }
+
+  n <- nrow(X_no_intercept)
+  p <- ncol(X_no_intercept)
 
   # for simplicity, we only allow numeric variables
   # lapply(X_no_intercept, assert_numeric(., any.missing = FALSE))
   # assert_numeric(Y, any.missing = FALSE)
 
-  n <- nrow(X_no_intercept)
-  p <- ncol(X_no_intercept)
-
   # in this implementation, we only have unique coefficient estimates
   # when the number of coefficients is not greater than number of observations
-  assert_false((p + 1) > n)
+  assert_false(p > n)
 
   X <- cbind(intercept = rep(1, times = n), X_no_intercept) |>
     as.matrix()
