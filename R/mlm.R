@@ -116,7 +116,7 @@ predict.mlm <- function(object, newdata, ...) {
 
   # Y = X * Beta
   predictors_norownames <- predictors
-  rownames(predictors_norownames) = NULL
+  # rownames(predictors_norownames) = NULL
   predictors_matrix <- as.matrix(predictors_norownames)
   predictors_matrix %*% object$coefficients
 }
