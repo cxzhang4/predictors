@@ -107,16 +107,18 @@ predict.mlm <- function(object, newdata, ...) {
 
   intercept_col_name <- names(object$coefficients)[1]
   predictors <- cbind(intercept = rep(1, times = nrow(object$predictors)), newdata)
-  setnames(predictors, "intercept", intercept_col_name)
+  # setNames(predictors, "intercept", intercept_col_name)
 
   # column ordering check
   expect_equal(names(newdata), names(object$predictors))
 
-  expect_equal()
-
   # Y = X * Beta
   predictors_norownames <- predictors
-  # rownames(predictors_norownames) = NULL
   predictors_matrix <- as.matrix(predictors_norownames)
-  predictors_matrix %*% object$coefficients
+  ret_vector <- as.vector(predictors_matrix %*% object$coefficients)
+  # names(ret_vector) = ifelse(is.null(rowNames(newdata)),
+  #                            as.character(1:length(ret_vector)),
+  #                            rowNames(newdata))
+  names(ret_vector) <- rownames(newdata)
+  ret_vector
 }
