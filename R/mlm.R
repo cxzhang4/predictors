@@ -78,15 +78,15 @@ mlm <- function(data, response_col_name) {
 #' @export
 #'
 #' @examples
-print.mlm <- function(mlm_mod, ...) {
+print.mlm <- function(x, ...) {
   cat("Multiple Linear Regression Model\n\n")
-  print(mlm_mod$coefficients)
-  invisible(mlm_mod)
+  print(x$coefficients)
+  invisible(x)
 }
 
 #' Generate predictions from an mlm model
 #'
-#' @param mlm_mod An object of class "mlm"
+#' @param object An object of class "mlm"
 #' @param newdata
 #' @param ...
 #'
@@ -94,15 +94,29 @@ print.mlm <- function(mlm_mod, ...) {
 #' @export
 #'
 #' @examples
-predict.mlm <- function(mlm_mod, newdata, ...) {
+predict.mlm <- function(object, newdata, ...) {
   # type checks
-  assert_equal(ncol(newdata), ncol(mlm_mod$predictors))
-  assert_numeric(X_no_intercept, any.missing = FALSE)
+  assert_data_frame(newdata, types = "numeric")
+  assert(ncol(newdata) == ncol(object$predictors))
 
-  intercept_col_name <- names(mlm_mod$coefficients)[1]
-  predictors <- cbind(intercept = rep(1, times = nrow(mlm_mod$predictors)), newdata)
+  # missingness check
+  assert_false(all(sapply(newdata, anyMissing)))
+
+  # dimensionality check
+  assert(ncol(newdata) == ncol(object$predictors))
+
+  intercept_col_name <- names(object$coefficients)[1]
+  predictors <- cbind(intercept = rep(1, times = nrow(object$predictors)), newdata)
   setnames(predictors, "intercept", intercept_col_name)
 
+  # column ordering check
+  expect_equal(names(newdata), names(object$predictors))
+
+  expect_equal()
+
   # Y = X * Beta
-  predictors %*% coefficientsmlm_mod$coefficients
+  predictors_norownames <- predictors
+  rownames(predictors_norownames) = NULL
+  predictors_matrix <- as.matrix(predictors_norownames)
+  predictors_matrix %*% object$coefficients
 }
