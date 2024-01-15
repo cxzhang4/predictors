@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/articles/special-files.html
 
 library(testthat)
-library(predict)
+library(predictors)
 
-test_check("predict")
+test_check("predictors")

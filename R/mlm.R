@@ -12,18 +12,18 @@ library(testthat)
 #' @examples
 mlm <- function(data, response_col_name) {
   # type checks
-  assert_data_frame(data, types = "numeric")
-  assert_string(response_col_name)
+  checkmate::assert_data_frame(data, types = "numeric")
+  checkmate::assert_string(response_col_name)
 
   # missingness check
-  assert(all(!sapply(data, anyMissing)))
+  checkmate::assert(all(!sapply(data, checkmate::anyMissing)))
 
-  assert(ncol(data) >= 2)
-  assert(ncol(data) <= nrow(data))
+  checkmate::assert(ncol(data) >= 2)
+  checkmate::assert(ncol(data) <= nrow(data))
 
   # check that response variable is valid
   all_var_names <- names(data)
-  assert_true(response_col_name %in% all_var_names)
+  checkmate::assert_true(response_col_name %in% all_var_names)
 
   predictor_var_names <- -which(names(data) == response_col_name)
 
@@ -39,13 +39,9 @@ mlm <- function(data, response_col_name) {
   n <- nrow(X_no_intercept)
   p <- ncol(X_no_intercept)
 
-  # for simplicity, we only allow numeric variables
-  # lapply(X_no_intercept, assert_numeric(., any.missing = FALSE))
-  # assert_numeric(Y, any.missing = FALSE)
-
   # in this implementation, we only have unique coefficient estimates
   # when the number of coefficients is not greater than number of observations
-  assert_false(p > n)
+  checkmate::assert_false(p > n)
 
   X <- cbind(intercept = rep(1, times = n), X_no_intercept) |>
     as.matrix()
@@ -81,14 +77,14 @@ mlm <- function(data, response_col_name) {
 #' @examples
 predict.mlm <- function(object, newdata, ...) {
   # type checks
-  assert_data_frame(newdata, types = "numeric")
-  assert(ncol(newdata) == ncol(object$predictors))
+  checkmate::assert_data_frame(newdata, types = "numeric")
+  checkmate::assert(ncol(newdata) == ncol(object$predictors))
 
   # missingness check
-  assert_false(all(sapply(newdata, anyMissing)))
+  checkmate::assert_false(all(sapply(newdata, checkmate::anyMissing)))
 
   # dimensionality check
-  assert(ncol(newdata) == ncol(object$predictors))
+  checkmate::assert(ncol(newdata) == ncol(object$predictors))
 
   intercept_col_name <- names(object$coefficients)[1]
   predictors <- cbind(intercept = rep(1, times = nrow(object$predictors)), newdata)

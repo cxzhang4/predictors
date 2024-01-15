@@ -4,10 +4,10 @@
 \alias{predict.mlm}
 \title{Generate predictions from an mlm model}
 \usage{
-\method{predict}{mlm}(mlm_mod, newdata, ...)
+\method{predict}{mlm}(object, newdata, ...)
 }
 \arguments{
-\item{mlm_mod}{An object of class "mlm"}
+\item{object}{An object of class "mlm"}
 
 \item{...}{}
 }

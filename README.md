@@ -1,4 +1,4 @@
-# Documented implementations of predictive algorithms in R
+# `predictors`: Documented implementations of predictive algorithms in R
 
 As of this writing, the following have been implemented:
 - Multiple linear regression (computed using the normal equations)
