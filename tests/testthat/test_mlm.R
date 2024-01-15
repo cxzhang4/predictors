@@ -89,7 +89,7 @@ test_that("mlm throws an error for p > n predictors", {
 test_that("mlm throws an error when a predictor has missing data", {
   mtcars_missing_predictor <- mtcars
   mtcars_missing_predictor[1, "cyl"] = NA
-  testthat::expect_false(all(sapply(mtcars_missing_predictor, anyMissing)))
+  testthat::expect_false(all(sapply(mtcars_missing_predictor, checkmate::anyMissing)))
 
   testthat::expect_error(mlm(data = mtcars_missing_predictor, response_col_name = "mpg"))
 })
@@ -97,7 +97,7 @@ test_that("mlm throws an error when a predictor has missing data", {
 test_that("mlm throws an error when the response has missing data", {
   mtcars_missing_response <- mtcars
   mtcars_missing_response[1, "mpg"] = NA
-  testthat::expect_false(all(sapply(mtcars_missing_response, anyMissing)))
+  testthat::expect_false(all(sapply(mtcars_missing_response, checkmate::anyMissing)))
 
   testthat::expect_error(mlm(data = mtcars_missing_response, response_col_name = "mpg"))
 })
