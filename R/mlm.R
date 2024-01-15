@@ -16,7 +16,7 @@ mlm <- function(data, response_col_name) {
   assert_string(response_col_name)
 
   # missingness check
-  assert_false(all(sapply(data, anyMissing)))
+  assert(all(!sapply(data, anyMissing)))
 
   assert(ncol(data) >= 2)
   assert(ncol(data) <= nrow(data))
@@ -67,21 +67,6 @@ mlm <- function(data, response_col_name) {
     response_col_name = response_col_name,
     coefficients = Beta_hat
   ), class = "mlm")
-}
-
-#' Print basic information about an mlm object
-#'
-#' @param mlm_mod An object of class "mlm"
-#' @param ...
-#'
-#' @return
-#' @export
-#'
-#' @examples
-print.mlm <- function(x, ...) {
-  cat("Multiple Linear Regression Model\n\n")
-  print(x$coefficients)
-  invisible(x)
 }
 
 #' Generate predictions from an mlm model
