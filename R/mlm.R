@@ -91,7 +91,7 @@ predict.mlm <- function(object, newdata, ...) {
   # setNames(predictors, "intercept", intercept_col_name)
 
   # column ordering check
-  expect_equal(names(newdata), names(object$predictors))
+  testthat::expect_equal(names(newdata), names(object$predictors))
 
   # Y = X * Beta
   predictors_norownames <- predictors
